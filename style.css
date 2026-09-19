@@ -1,0 +1,282 @@
+/* ローディング設定 */
+#loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffff;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body {
+  font-family: 'Noto Serif JP', serif;
+  color: #f5f5f5;         
+  background: #000000;    
+  line-height: 1.8;       
+  letter-spacing: 0.05em; 
+  scroll-behavior: smooth;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* 余白調整 */
+.section-space { margin-top: 100px; }
+.section-space-ex { margin-top: 120px; }
+.section-title { margin-bottom: 25px; font-size: 24px; }
+
+
+/* ナビゲーション */
+nav {
+  background: #545454;
+  padding: 0;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  font-size: 10px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0;
+  justify-content: center;
+}
+
+.nav-list li a {
+  display: block;
+  text-align: center;
+  padding: 16px 24px;
+  color: #ffffff;
+  font-size: 14px;
+  font-family: 'Noto Sans JP', sans-serif;
+  letter-spacing: 1px;
+  transition: all 0.4s ease;
+  white-space: nowrap;
+}
+
+.nav-list li a:hover {
+  background: rgba(255,255,255,0.1);
+} 
+
+.menu-trigger {
+    display: none;
+  }
+
+/* トップ画像 */
+.image-top img {
+  display: block;
+  margin: 0 auto; 
+  width: 50%;
+}
+
+.overview-container {
+  display: flex;
+  align-items: flex-start; 
+  justify-content: space-between;
+  gap: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.overview-text-group {
+  flex: 1;
+}
+
+.overview-image-group {
+  flex: 1;
+}
+
+.overview-image-group img{
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-top: 20px;
+}
+
+.overview-image-group iframe{
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  margin-top: 60px;
+  aspect-ratio: 16 / 9;
+}
+
+.shincyaku-ex { 
+  margin-top: 30px; 
+}
+
+.new-list { 
+  padding-left: 20px; 
+}
+
+.new-list li a {
+  color: #ffffff;
+  transition: color 0.3s ease;
+}
+
+.new-list li a:hover {
+  color: #cccccc;
+}
+
+.magazine-section h3 {
+  white-space: nowrap;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.magazine-image-box {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.magazine-section .magazine-image-box img {
+  max-width: 300px; 
+  width: 100%;
+  margin: 30px;
+}
+
+/* フッター */
+footer {
+  text-align: center;
+  padding: 40px 0;
+  color: #888888;
+  font-size: 12px;
+}
+
+
+footer img{
+  width: 5%;
+  height: auto;
+  margin: 10px;
+
+}
+
+/* レスポンシブ設定(768px以下）*/
+@media (max-width: 768px) {
+
+  .nav ul a {
+    font-size: 5px;      
+    padding: 5px 5px;     
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    background-color: #222; 
+    gap: 12px;
+  }            
+  
+  /* 余白調整(768px以下）*/
+  .section-space {margin-top: 15px;}
+  .section-space-ex{margin-top: 15px;}
+
+  .overview-container {
+    flex-direction: column; 
+    gap: 30px;
+  }
+
+   .overview-text-group {
+    width: 100%;
+  }
+
+    .overview-text-group h2 {
+    white-space: normal; 
+  }
+
+    .overview-image-group{
+    width: 100%;
+    margin-top: 15px; 
+  }
+
+  .new-list ul li{ 
+    text-decoration: none;
+    background-color: #000000; 
+  }
+
+    .overview-image-group iframe{
+    width: 100%;
+    margin: 15px;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+    .magazine-section .magazine-image-box img {
+    max-width: 100%; 
+    margin: 0 auto;
+  }
+
+/* ハンバーガーメニュー設定 */
+  .menu-trigger {
+    display: block;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 10px auto; 
+    width: 40px;       
+  }
+
+  .hamburger-icon {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .nav-list {
+    display: none; 
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 20px 0;
+  }
+
+  .nav-list.is-open {
+    display: flex; 
+  }
+
+  .footer img{
+  width: 60%;
+  height: auto;
+  margin: 10px;
+
+}
+
+.magazine-image-box {
+    width: 60%; 
+    display: flex;     
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;  
+  }
+
+.magazine-image-box img {
+  max-width: 50%;
+  height: auto;
+  margin: 10px;
+  display: block;
+}
+
+/*レスポンシブ設定（画面幅769px以上）*/
+@media (min-width: 769px) {
+  .menu-trigger {
+    display: none;
+  }
+
+  .nav-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+  }
+}
+}
