@@ -1,29 +1,57 @@
-// ローディングアニメーション設定
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
   const loader = document.getElementById('loader');
+  const video = document.getElementById('loader-video');
+  const fallback = document.getElementById('loader-fallback');
+  if (!loader || !video) return;
 
-  setTimeout(() => {
-    loader.style.opacity = '0';           
-    loader.style.pointerEvents = 'none'; 
-    
+  document.documentElement.classList.add('is-loading');
+  let dismissed = false;
+  let fallbackTimer;
+  let customTimer;
+
+  const dismissLoader = () => {
+    if (dismissed) return;
+    dismissed = true;
+    clearTimeout(watchdog);
+    clearTimeout(fallbackTimer);
+    clearTimeout(customTimer);
+    document.documentElement.classList.remove('is-loading');
+    loader.classList.add('is-hidden');
     setTimeout(() => {
-      loader.style.display = 'none';
-    }, 500);
-    
-  }, 3500); // 時間調節（2000 = 2秒, 3000 = 3秒）
-});
+      loader.hidden = true;
+      video.pause();
+    }, 1000);
+  };
 
+  const watchdog = setTimeout(dismissLoader, 15000);
+
+  const showFallback = () => {
+    if (dismissed || fallbackTimer) return;
+    video.pause();
+    video.hidden = true;
+    if (fallback) fallback.hidden = false;
+    fallbackTimer = setTimeout(dismissLoader, 3500);
+  };
+
+   // ローディング時間を設定
+  video.addEventListener('play', () => {
+    customTimer = setTimeout(dismissLoader, 3500);
+  }, { once: true });
+
+  video.addEventListener('ended', dismissLoader, { once: true });
+  video.addEventListener('error', showFallback, { once: true });
+  video.muted = true;
+  video.play().catch(showFallback);
+});
 
 document.addEventListener('DOMContentLoaded', function () {
   const hamburger = document.getElementById('js-hamburger');
   const navMenu = document.getElementById('js-nav');
 
-  // ボタンをクリックしたらメニューを開閉
   hamburger.addEventListener('click', function () {
     navMenu.classList.toggle('is-open');
   });
 
-  // リンク（メニュー内の項目）をクリックしたら自動で閉じる（ページ内スクロール用）
   const links = navMenu.querySelectorAll('a');
   links.forEach(function (link) {
     link.addEventListener('click', function () {
