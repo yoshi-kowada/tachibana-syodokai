@@ -4,11 +4,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const fallback = document.getElementById('loader-fallback');
   if (!loader || !video) return;
 
-  if (sessionStorage.getItem('hasLoaded')) {
-    // 2回目以降（リロード等）はローディングを瞬時に消す・非表示にする
-    document.documentElement.classList.remove('is-loading');
-    loader.style.display = 'none';
+  let alreadyLoaded = false;
+  try {
+    alreadyLoaded = sessionStorage.getItem('hasLoaded') === 'true';
+  } catch {
+    // Storage can be unavailable in restricted browser contexts.
+  }
+  if (alreadyLoaded) {
     loader.hidden = true;
+    video.pause();
+    document.documentElement.classList.remove('is-loading');
     return;
   }
 
@@ -24,14 +29,17 @@ document.addEventListener('DOMContentLoaded', () => {
     clearTimeout(fallbackTimer);
     clearTimeout(customTimer);
 
-    sessionStorage.setItem('hasLoaded', 'true');
-
-    document.documentElement.classList.remove('is-loading');
+    try {
+      sessionStorage.setItem('hasLoaded', 'true');
+    } catch {
+      // Finishing the loader must not depend on storage permission.
+    }
     loader.classList.add('is-hidden');
     setTimeout(() => {
       loader.hidden = true;
       video.pause();
-    }, 1000);
+      document.documentElement.classList.remove('is-loading');
+    }, 500);
   };
 
   const watchdog = setTimeout(dismissLoader, 15000);
@@ -45,13 +53,19 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // ローディング時間を設定
-  video.addEventListener('play', () => {
-    customTimer = setTimeout(dismissLoader, 3500);
-  }, { once: true });
+  const onPlaying = () => {
+    if (!dismissed && !customTimer && !fallbackTimer) {
+      customTimer = setTimeout(dismissLoader, 3500);
+    }
+  };
+  video.addEventListener('playing', onPlaying, { once: true });
 
   video.addEventListener('ended', dismissLoader, { once: true });
   video.addEventListener('error', showFallback, { once: true });
   video.muted = true;
+  video.defaultMuted = true;
+  video.playsInline = true;
+  if (!video.paused && video.readyState >= 3) onPlaying();
   video.play().catch(showFallback);
 });
 

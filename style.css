@@ -1,12 +1,12 @@
 /* ローディング設定 */
 #loader {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
   background-color: #000000;
-  z-index: 9999;
+  z-index: 2147483647;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,9 +40,30 @@
   display: none;
 }
 
-html.is-loading {
+html.is-loading,
+html.is-loading body {
   overflow: hidden;
 }
+
+/* Keep the page hidden until the loader's fade has completely finished. */
+html.is-loading main,
+html.is-loading footer {
+  visibility: hidden;
+}
+
+#loader-fallback:not([hidden]) {
+  animation: loader-pulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes loader-pulse {
+  from { opacity: 0.55; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #loader-fallback { animation: none; }
+}
+
 
 body {
   font-family: 'Noto Serif JP', serif;
