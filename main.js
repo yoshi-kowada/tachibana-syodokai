@@ -4,6 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const fallback = document.getElementById('loader-fallback');
   if (!loader || !video) return;
 
+  if (sessionStorage.getItem('hasLoaded')) {
+    // 2回目以降（リロード等）はローディングを瞬時に消す・非表示にする
+    document.documentElement.classList.remove('is-loading');
+    loader.style.display = 'none';
+    loader.hidden = true;
+    return;
+  }
+
   document.documentElement.classList.add('is-loading');
   let dismissed = false;
   let fallbackTimer;
@@ -15,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     clearTimeout(watchdog);
     clearTimeout(fallbackTimer);
     clearTimeout(customTimer);
+
+    sessionStorage.setItem('hasLoaded', 'true');
+
     document.documentElement.classList.remove('is-loading');
     loader.classList.add('is-hidden');
     setTimeout(() => {
@@ -33,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fallbackTimer = setTimeout(dismissLoader, 3500);
   };
 
-   // ローディング時間を設定
+  // ローディング時間を設定
   video.addEventListener('play', () => {
     customTimer = setTimeout(dismissLoader, 3500);
   }, { once: true });
@@ -44,9 +55,12 @@ document.addEventListener('DOMContentLoaded', () => {
   video.play().catch(showFallback);
 });
 
+// ハンバーガーメニューの処理（変更なし）
 document.addEventListener('DOMContentLoaded', function () {
   const hamburger = document.getElementById('js-hamburger');
   const navMenu = document.getElementById('js-nav');
+
+  if (!hamburger || !navMenu) return;
 
   hamburger.addEventListener('click', function () {
     navMenu.classList.toggle('is-open');
